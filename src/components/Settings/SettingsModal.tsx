@@ -12,9 +12,6 @@ import {
   Key,
   Map,
   Check,
-  FolderDown,
-  CloudLightning,
-  ChevronDown,
 } from 'lucide-react';
 import { useSpoof } from '../../context/SpoofContext';
 
@@ -47,7 +44,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [showPasteModal, setShowPasteModal] = useState(false);
   const [tempCartoKey, setTempCartoKey] = useState(cartoApiKey);
   const [cartoKeySavedMsg, setCartoKeySavedMsg] = useState(false);
-  const [showIpaGuide, setShowIpaGuide] = useState(false);
 
   if (!isOpen) return null;
 
@@ -326,44 +322,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     Routing, teleports, and joystick movements feed into Apple&apos;s DVT developer service (<code className="font-mono text-white/90">com.apple.dt.simulatelocation</code>). The simulation overrides iOS <code className="font-mono text-white/90">locationd</code>, so Find My, Pokémon GO, Life360, and Apple Maps all read the simulated GPS.
                   </p>
                 </div>
-              </div>
-
-              {/* GitHub Actions IPA builder button */}
-              <div className="pt-2 border-t border-white/10">
-                <button
-                  type="button"
-                  onClick={() => setShowIpaGuide((prev) => !prev)}
-                  className="w-full py-2.5 px-3 rounded-xl bg-locus-accent/15 hover:bg-locus-accent/25 border border-locus-accent/40 text-locus-accent font-bold text-xs flex items-center justify-between transition-colors"
-                >
-                  <div className="flex items-center gap-2">
-                    <CloudLightning className="w-4 h-4" />
-                    <span>Build .IPA in Cloud (GitHub Actions - No Mac Needed)</span>
-                  </div>
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showIpaGuide ? 'rotate-180' : ''}`} />
-                </button>
-
-                {showIpaGuide && (
-                  <div className="mt-2.5 p-3 rounded-xl bg-black/40 border border-white/10 space-y-2 text-[11px] text-white/80 animate-in fade-in duration-200">
-                    <div className="font-bold text-white flex items-center gap-1.5">
-                      <FolderDown className="w-3.5 h-3.5 text-locus-accent" />
-                      <span>3 Steps to get your .IPA:</span>
-                    </div>
-                    <ol className="list-decimal list-inside space-y-1.5 text-white/70 pl-1 leading-relaxed">
-                      <li>
-                        <strong className="text-white">Push to GitHub:</strong> Upload or push this project to a new repository on your GitHub account. (The file <code className="font-mono text-locus-accent">.github/workflows/build-ipa.yml</code> is already configured).
-                      </li>
-                      <li>
-                        <strong className="text-white">Run GitHub Action:</strong> In your GitHub repo, go to the <strong>Actions</strong> tab &rarr; click <strong>Build iOS IPA</strong> &rarr; click <strong>Run workflow</strong>.
-                      </li>
-                      <li>
-                        <strong className="text-white">Download .IPA:</strong> After 3 minutes, click the completed run and download <code className="font-mono text-white font-bold">Locus-iOS-IPA</code> under Artifacts!
-                      </li>
-                    </ol>
-                    <div className="pt-2 border-t border-white/10 text-[10px] text-white/50">
-                      Install onto your iPhone using <strong>Sideloadly</strong> (PC), <strong>SideStore</strong>, <strong>AltStore</strong>, or <strong>TrollStore</strong>. See <code className="font-mono text-white/70">BUILDING_IPA_GUIDE.md</code> in project root for full instructions.
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </div>
