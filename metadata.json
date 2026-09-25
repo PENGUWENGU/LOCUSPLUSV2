@@ -1,0 +1,8 @@
+{
+  "name": "Locus",
+  "description": "Location simulator and teleportation tool with live joystick, road routing, GPX import/export, and route playback.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,11 +1,26 @@
-<div align="center">
+# Locus (Web Edition)
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+Interactive location simulation, teleportation, and route planning suite migrated to React & TypeScript.
 
-  <h1>Built with AI Studio</h2>
+## Features
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+- **One-tap Teleport**: Tap the map or search any place worldwide to teleport coordinates instantly.
+- **Live Joystick**: Interactive touch/mouse controller supporting Walk (1.4 m/s), Run (3.3 m/s), Cycle (6.5 m/s), and Drive (13.4 m/s) with natural movement variance and custom speed input.
+- **Road Routing & GPX**: Calculate real street and footpath routes, draw freehand paths, and import or export standard GPX 1.1 tracks.
+- **Favorites & Recents**: Quick bookmarking of favorite spots with custom naming and teleport history.
+- **Liquid Glass UI**: Faithful dark aesthetic with live status pills, custom pulsing location pucks, and responsive overlays.
+- **Tunnel & Pairing Management**: Built-in developer pairing simulator and LocalDevVPN tunnel configuration.
+- **Easter Egg**: The original grasshopper swarm easter egg screen.
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## Development
 
-</div>
+```bash
+npm install
+npm run dev
+```
+
+App runs on port 3000 (`0.0.0.0:3000`).
+
+## License
+
+MIT.

@@ -1,0 +1,74 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: # Allows manual trigger from GitHub UI anytime
+
+jobs:
+  build-ios:
+    name: Build & Package .IPA
+    runs-on: macos-14 # Apple Silicon cloud runner with Xcode pre-installed
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Node Dependencies
+        run: npm ci || npm install
+
+      - name: Build Web Application
+        run: npm run build
+
+      - name: Install Capacitor CLI & Core
+        run: |
+          npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/ios@latest
+
+      - name: Initialize Capacitor for iOS
+        run: |
+          npx cap init "Locus" "com.locus.gps" --web-dir "dist"
+          npx cap add ios
+          npx cap sync ios
+
+      - name: Configure Info.plist Permissions
+        run: |
+          PLIST_PATH="ios/App/App/Info.plist"
+          if [ -f "$PLIST_PATH" ]; then
+            /usr/libexec/PlistBuddy -c "Add :NSLocationWhenInUseUsageDescription string 'Locus requires your location for map positioning and navigation.'" "$PLIST_PATH" || true
+            /usr/libexec/PlistBuddy -c "Add :NSLocationAlwaysAndWhenInUseUsageDescription string 'Locus requires location access for continuous route simulation.'" "$PLIST_PATH" || true
+            /usr/libexec/PlistBuddy -c "Add :UIBackgroundModes array" "$PLIST_PATH" || true
+            /usr/libexec/PlistBuddy -c "Add :UIBackgroundModes:0 string 'location'" "$PLIST_PATH" || true
+          fi
+
+      - name: Build iOS App with Xcode (Unsigned / Sideload-Ready)
+        run: |
+          cd ios/App
+          xcodebuild clean build \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            CONFIGURATION_BUILD_DIR=../../build-output
+
+      - name: Package .app into .ipa for Sideloading (AltStore / SideStore / TrollStore)
+        run: |
+          mkdir -p Payload
+          cp -r build-output/App.app Payload/
+          zip -r Locus.ipa Payload
+          rm -rf Payload
+
+      - name: Upload .IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Locus-iOS-IPA
+          path: Locus.ipa
+          retention-days: 14
